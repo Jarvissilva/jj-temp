@@ -9,7 +9,6 @@ export default function Home() {
 
   const messages = [
     "You had ONE job.",
-    "Still clicking?",
     "Bankai: Katen kyokotsu karamatsu shinjyuu",
     "Bankai: Zanka no tachi",
     "Bankai: Senbonzakura kageyoshi",
