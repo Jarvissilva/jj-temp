@@ -2,11 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export default function Home() {
-  const buttonRef = useRef(null);
-  const [clicks, setClicks] = useState(0);
-  const [message, setMessage] = useState("Don’t click the button.");
+export default function Observed() {
+  const startTime = useRef(Date.now());
+  const lastMove = useRef(Date.now());
+  const clicks = useRef(0);
+  const moves = useRef(0);
+  const idleTimer = useRef(null);
 
+<<<<<<< HEAD
   const messages = [
     "You had ONE job.",
     "Bankai: Katen kyokotsu karamatsu shinjyuu",
@@ -17,114 +20,144 @@ export default function Home() {
     "Are you proud of this?",
     "I can do this all day.",
   ];
+=======
+  const [message, setMessage] = useState("We are observing.");
+  const [ended, setEnded] = useState(false);
+  const [ending, setEnding] = useState(null);
+>>>>>>> 918c099 (Refactor Observed component to track user interactions and provide feedback based on behavior)
 
   useEffect(() => {
-    moveButton();
+    const onMove = () => {
+      moves.current++;
+      lastMove.current = Date.now();
+    };
+
+    const onClick = () => {
+      clicks.current++;
+    };
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("click", onClick);
+
+    idleTimer.current = setInterval(checkState, 1500);
+
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("click", onClick);
+      clearInterval(idleTimer.current);
+    };
   }, []);
 
-  function moveButton() {
-    if (!buttonRef.current) return;
+  function checkState() {
+    if (ended) return;
 
-    const btn = buttonRef.current;
-    const maxX = window.innerWidth - 160;
-    const maxY = window.innerHeight - 80;
+    const now = Date.now();
+    const idleTime = now - lastMove.current;
+    const totalTime = now - startTime.current;
 
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
+    // Idle behavior
+    if (idleTime > 7000) {
+      setMessage("Waiting won’t help.");
+    }
 
-    btn.style.left = `${x}px`;
-    btn.style.top = `${y}px`;
+    // Rage clicking
+    if (clicks.current > 15 && totalTime < 20000) {
+      finish("THE PANICKER", "You tried to force control.");
+    }
+
+    // Calm observer
+    if (totalTime > 30000 && clicks.current < 5 && moves.current < 50) {
+      finish("THE OBSERVER", "You stayed calm under observation.");
+    }
+
+    // Chaos behavior
+    if (moves.current > 300 && clicks.current > 10) {
+      finish("THE REBEL", "You tried to confuse the system.");
+    }
+
+    // Escape
+    if (totalTime > 45000 && clicks.current === 0) {
+      finish("THE ESCAPE ARTIST", "You refused to play.");
+    }
+
+    // Subtle psychological nudges
+    if (totalTime > 10000 && !ended) {
+      setMessage(randomThought());
+    }
   }
 
-  function handleMouseEnter() {
-    moveButton();
+  function finish(type, description) {
+    setEnded(true);
+    setEnding({ type, description });
+    setMessage("Analysis complete.");
   }
 
-  function handleClick() {
-    setClicks((c) => c + 1);
-    setMessage(messages[Math.floor(Math.random() * messages.length)]);
-
-    document.body.classList.add("shake");
-    document.body.style.background = `hsl(${Math.random() * 360}, 40%, 15%)`;
-
-    setTimeout(() => {
-      document.body.classList.remove("shake");
-    }, 300);
+  function randomThought() {
+    const thoughts = [
+      "Why are you still here?",
+      "You hesitate more than most.",
+      "You are aware of yourself.",
+      "You think there is a trick.",
+      "There is no goal.",
+      "Your behavior is noted.",
+    ];
+    return thoughts[Math.floor(Math.random() * thoughts.length)];
   }
 
   return (
-    <>
-      <main className="container">
-        <h1>🚫 Do Not Click</h1>
-        <p>{message}</p>
-        <p>
-          Clicks: <strong>{clicks}</strong>
-        </p>
-      </main>
-
-      <button
-        ref={buttonRef}
-        className="chaos-btn"
-        onMouseEnter={handleMouseEnter}
-        onClick={handleClick}
-      >
-        DON’T CLICK
-      </button>
+    <main className="container">
+      {!ended ? (
+        <>
+          <h1>{message}</h1>
+          <p className="hint">(There are no instructions.)</p>
+        </>
+      ) : (
+        <>
+          <h1>{ending.type}</h1>
+          <p>{ending.description}</p>
+          <p className="small">
+            Time observed: {Math.floor((Date.now() - startTime.current) / 1000)}
+            s
+          </p>
+        </>
+      )}
 
       <style jsx>{`
         .container {
           height: 100vh;
+          background: radial-gradient(circle at center, #111, #000);
+          color: #eaeaea;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           text-align: center;
-          color: white;
-          pointer-events: none;
+          padding: 20px;
+          user-select: none;
         }
 
         h1 {
-          margin-bottom: 8px;
+          font-size: 2rem;
+          margin-bottom: 12px;
+          letter-spacing: 0.04em;
         }
 
         p {
-          opacity: 0.85;
+          opacity: 0.75;
+          max-width: 420px;
         }
 
-        .chaos-btn {
-          position: fixed;
-          padding: 16px 28px;
-          font-size: 18px;
-          border: none;
-          border-radius: 14px;
-          background: #ff4757;
-          color: white;
-          cursor: pointer;
-          z-index: 10;
+        .hint {
+          font-size: 0.85rem;
+          opacity: 0.4;
         }
 
-        :global(.shake) {
-          animation: shake 0.3s;
-        }
-
-        @keyframes shake {
-          0% {
-            transform: translate(0);
-          }
-          25% {
-            transform: translate(-5px, 5px);
-          }
-          50% {
-            transform: translate(5px, -5px);
-          }
-          75% {
-            transform: translate(-5px, -5px);
-          }
-          100% {
-            transform: translate(0);
-          }
+        .small {
+          font-size: 0.8rem;
+          margin-top: 20px;
+          opacity: 0.5;
         }
       `}</style>
-    </>
+    </main>
   );
 }
