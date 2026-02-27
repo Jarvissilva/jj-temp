@@ -9,22 +9,9 @@ export default function Observed() {
   const moves = useRef(0);
   const idleTimer = useRef(null);
 
-<<<<<<< HEAD
-  const messages = [
-    "You had ONE job.",
-    "Bankai: Katen kyokotsu karamatsu shinjyuu",
-    "Bankai: Zanka no tachi",
-    "Bankai: Senbonzakura kageyoshi",
-    "This is why bugs exist.",
-    "Stop. Get some help.",
-    "Are you proud of this?",
-    "I can do this all day.",
-  ];
-=======
   const [message, setMessage] = useState("We are observing.");
   const [ended, setEnded] = useState(false);
   const [ending, setEnding] = useState(null);
->>>>>>> 918c099 (Refactor Observed component to track user interactions and provide feedback based on behavior)
 
   useEffect(() => {
     const onMove = () => {
