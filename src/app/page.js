@@ -1,8 +1,28 @@
 "use client"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 export default function Page() {
-  const [play, setPlay] = useState(false)
+  const [stage, setStage] = useState("button") 
+  const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    if (stage === "loading") {
+      let value = 0
+      const interval = setInterval(() => {
+        value += 4
+        setProgress(value)
+
+        if (value >= 100) {
+          clearInterval(interval)
+          setTimeout(() => {
+            setStage("video")
+          }, 300)
+        }
+      }, 80)
+
+      return () => clearInterval(interval)
+    }
+  }, [stage])
 
   return (
     <div style={{ 
@@ -10,22 +30,72 @@ export default function Page() {
       flexDirection: "column", 
       alignItems: "center", 
       justifyContent: "center", 
-      height: "100vh" 
+      height: "100vh",
+      background: "linear-gradient(135deg, #0f2027, #203a43, #2c5364)",
+      fontFamily: "sans-serif",
+      color: "white"
     }}>
       
-      {!play ? (
+      {stage === "button" && (
         <button 
-          onClick={() => setPlay(true)}
+          onClick={() => setStage("loading")}
           style={{
-            padding: "15px 30px",
-            fontSize: "20px",
-            cursor: "pointer"
+            padding: "18px 40px",
+            fontSize: "22px",
+            fontWeight: "600",
+            borderRadius: "50px",
+            border: "none",
+            cursor: "pointer",
+            background: "linear-gradient(45deg, #ff416c, #ff4b2b)",
+            color: "white",
+            boxShadow: "0 10px 25px rgba(255,75,43,0.5)",
+            transition: "all 0.3s ease"
+          }}
+          onMouseOver={e => {
+            e.target.style.transform = "scale(1.08)"
+            e.target.style.boxShadow = "0 15px 35px rgba(255,75,43,0.7)"
+          }}
+          onMouseOut={e => {
+            e.target.style.transform = "scale(1)"
+            e.target.style.boxShadow = "0 10px 25px rgba(255,75,43,0.5)"
+          }}
+          onMouseDown={e => {
+            e.target.style.transform = "scale(0.95)"
+          }}
+          onMouseUp={e => {
+            e.target.style.transform = "scale(1.08)"
           }}
         >
-          Click Me 👀
+          🎁 Click Me
         </button>
-      ) : (
-        <>
+      )}
+
+      {stage === "loading" && (
+        <div style={{ width: "300px", textAlign: "center" }}>
+          <p style={{ marginBottom: "10px" }}>
+            Preparing something special... 🚀
+          </p>
+
+          <div style={{
+            height: "20px",
+            width: "100%",
+            background: "rgba(255,255,255,0.2)",
+            borderRadius: "10px",
+            overflow: "hidden"
+          }}>
+            <div style={{
+              height: "100%",
+              width: `${progress}%`,
+              background: "linear-gradient(90deg, #00c6ff, #0072ff)",
+              transition: "width 0.1s"
+            }}></div>
+          </div>
+
+          <p style={{ marginTop: "8px" }}>{progress}%</p>
+        </div>
+      )}
+
+      {stage === "video" && (
         <iframe
           width="560"
           height="315"
@@ -33,9 +103,7 @@ export default function Page() {
           title="Rick Roll"
           allow="autoplay; encrypted-media"
           allowFullScreen
-          ></iframe>
-          <h1 className="mt-2">HE HE rick roolled</h1>
-          </>
+        ></iframe>
       )}
 
     </div>
