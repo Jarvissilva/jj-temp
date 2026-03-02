@@ -1,4 +1,5 @@
 "use client"
+import Bhideo from "@/components/Bhideo"
 import React, { useState, useEffect } from "react"
 
 export default function Page() {
@@ -96,14 +97,15 @@ export default function Page() {
       )}
 
       {stage === "video" && (
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/Aq5WXmQQooo?autoplay=1"
-          title="Rick Roll"
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-        ></iframe>
+        // <iframe
+        //   width="560"
+        //   height="315"
+        //   src="https://www.youtube.com/embed/Aq5WXmQQooo?autoplay=1"
+        //   title="Rick Roll"
+        //   allow="autoplay; encrypted-media"
+        //   allowFullScreen
+        // ></iframe>
+        <Bhideo />
       )}
 
     </div>
