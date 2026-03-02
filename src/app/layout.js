@@ -24,7 +24,7 @@ export const metadata = {
     description: 'Free surprise gifts — no signup, no login. Just click and claim instantly! 🎁',
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_URL}/gift.png`,
+        url: `https://jj-temp.vercel.app/gift.png`,
         width:1200 ,
         height: 630,
         alt: 'Yokoso watshi no gifting sekai yea',
