@@ -1,44 +1,46 @@
-"use client"
-import Bhideo from "@/components/Bhideo"
-import React, { useState, useEffect } from "react"
+"use client";
+import Bhideo from "@/components/Bhideo";
+import Link from "next/link";
+import React, { useState, useEffect } from "react";
 
 export default function Page() {
-  const [stage, setStage] = useState("button") 
-  const [progress, setProgress] = useState(0)
+  const [stage, setStage] = useState("button");
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (stage === "loading") {
-      let value = 0
+      let value = 0;
       const interval = setInterval(() => {
-        value += 4
-        setProgress(value)
+        value += 4;
+        setProgress(value);
 
         if (value >= 100) {
-          clearInterval(interval)
+          clearInterval(interval);
           setTimeout(() => {
-            setStage("video")
-          }, 300)
+            setStage("video");
+          }, 300);
         }
-      }, 80)
+      }, 80);
 
-      return () => clearInterval(interval)
+      return () => clearInterval(interval);
     }
-  }, [stage])
+  }, [stage]);
 
   return (
-    <div style={{ 
-      display: "flex", 
-      flexDirection: "column", 
-      alignItems: "center", 
-      justifyContent: "center", 
-      height: "100vh",
-      background: "linear-gradient(135deg, #0f2027, #203a43, #2c5364)",
-      fontFamily: "sans-serif",
-      color: "white"
-    }}>
-      
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+        background: "linear-gradient(135deg, #0f2027, #203a43, #2c5364)",
+        fontFamily: "sans-serif",
+        color: "white",
+      }}
+    >
       {stage === "button" && (
-        <button 
+        <button
           onClick={() => setStage("loading")}
           style={{
             padding: "18px 40px",
@@ -50,46 +52,52 @@ export default function Page() {
             background: "linear-gradient(45deg, #ff416c, #ff4b2b)",
             color: "white",
             boxShadow: "0 10px 25px rgba(255,75,43,0.5)",
-            transition: "all 0.3s ease"
+            transition: "all 0.3s ease",
           }}
-          onMouseOver={e => {
-            e.target.style.transform = "scale(1.08)"
-            e.target.style.boxShadow = "0 15px 35px rgba(255,75,43,0.7)"
+          onMouseOver={(e) => {
+            e.target.style.transform = "scale(1.08)";
+            e.target.style.boxShadow = "0 15px 35px rgba(255,75,43,0.7)";
           }}
-          onMouseOut={e => {
-            e.target.style.transform = "scale(1)"
-            e.target.style.boxShadow = "0 10px 25px rgba(255,75,43,0.5)"
+          onMouseOut={(e) => {
+            e.target.style.transform = "scale(1)";
+            e.target.style.boxShadow = "0 10px 25px rgba(255,75,43,0.5)";
           }}
-          onMouseDown={e => {
-            e.target.style.transform = "scale(0.95)"
+          onMouseDown={(e) => {
+            e.target.style.transform = "scale(0.95)";
           }}
-          onMouseUp={e => {
-            e.target.style.transform = "scale(1.08)"
+          onMouseUp={(e) => {
+            e.target.style.transform = "scale(1.08)";
           }}
         >
           🎁 Click Me
         </button>
       )}
-
+      <Link href="/kolab" className="mt-5">
+        KOlab
+      </Link>
       {stage === "loading" && (
         <div style={{ width: "300px", textAlign: "center" }}>
           <p style={{ marginBottom: "10px" }}>
             Preparing something special... 🚀
           </p>
 
-          <div style={{
-            height: "20px",
-            width: "100%",
-            background: "rgba(255,255,255,0.2)",
-            borderRadius: "10px",
-            overflow: "hidden"
-          }}>
-            <div style={{
-              height: "100%",
-              width: `${progress}%`,
-              background: "linear-gradient(90deg, #00c6ff, #0072ff)",
-              transition: "width 0.1s"
-            }}></div>
+          <div
+            style={{
+              height: "20px",
+              width: "100%",
+              background: "rgba(255,255,255,0.2)",
+              borderRadius: "10px",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                height: "100%",
+                width: `${progress}%`,
+                background: "linear-gradient(90deg, #00c6ff, #0072ff)",
+                transition: "width 0.1s",
+              }}
+            ></div>
           </div>
 
           <p style={{ marginTop: "8px" }}>{progress}%</p>
@@ -106,10 +114,7 @@ export default function Page() {
         //   allowFullScreen
         // ></iframe>
         <Bhideo />
-
-        
       )}
-
     </div>
-  )
+  );
 }
