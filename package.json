@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "sync":"npx next-video sync --dir src/videos",
-    "dev": "next dev ",
+    "dev": "(ffplay -nodisp -autoexit -loglevel quiet public/demo.mp3 >/dev/null 2>&1 &) && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
